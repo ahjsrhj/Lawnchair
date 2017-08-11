@@ -325,6 +325,7 @@
     <string name="blur_radius_pref_title">Blur radius</string>
     <string name="white_google_icon_pref_title">Use white Google icon</string>
     <string name="hide_icon_labels_pref_title">Hide icon labels on home screen</string>
+    <string name="hide_all_apps_icon_labels_pref_title">Hide icon labels in drawer</string>
     <string name="workspace_label_color_hue_pref_title">Color of icon labels on home screen</string>
     <string name="workspace_label_color_variation_pref_title">Color variation of icon labels on home screen</string>
     <string name="all_apps_opacity_pref_title">Drawer opacity</string>
@@ -487,4 +488,5 @@
     <string name="pref_all_apps_custom_label_color">Use custom label color</string>
     <string name="pref_all_apps_label_color_variation">Color variation of icon labels in app drawer</string>
     <string name="pref_all_apps_label_color">Color of icon labels in drawer</string>
+    <string name="pref_num_rows_drawer">Number of rows in drawer</string>
 </resources>

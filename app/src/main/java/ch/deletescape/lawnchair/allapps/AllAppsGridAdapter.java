@@ -18,7 +18,6 @@ package ch.deletescape.lawnchair.allapps;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
@@ -257,10 +256,9 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
 
                 // Ensure the all apps icon height matches the workspace icons
                 DeviceProfile profile = mLauncher.getDeviceProfile();
-                Point cellSize = profile.getCellSize();
                 GridLayoutManager.LayoutParams lp =
                         (GridLayoutManager.LayoutParams) icon.getLayoutParams();
-                lp.height = cellSize.y;
+                lp.height = profile.getAllAppsCellHeight(mLauncher);
                 icon.setLayoutParams(lp);
                 return new ViewHolder(icon);
             }
@@ -281,7 +279,7 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
             case VIEW_TYPE_SEARCH_DIVIDER:
                 ImageView divider = (ImageView) mLayoutInflater.inflate(
                         R.layout.all_apps_search_divider, parent, false);
-                if (!FeatureFlags.INSTANCE.useRoundSearchBar(mLauncher))
+                if (!Utilities.getPrefs(mLauncher).useRoundSearchBar())
                     divider.setImageDrawable(new ColorDrawable(Utilities.getDynamicAccent(parent.getContext())));
                 return new ViewHolder(divider);
             case VIEW_TYPE_SEARCH_MARKET_DIVIDER:
