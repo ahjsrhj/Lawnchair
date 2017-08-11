@@ -1,7 +1,9 @@
 package ch.deletescape.lawnchair.popup;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +24,8 @@ import ch.deletescape.lawnchair.shortcuts.DeepShortcutManager;
 import ch.deletescape.lawnchair.util.ComponentKey;
 import ch.deletescape.lawnchair.util.MultiHashMap;
 import ch.deletescape.lawnchair.util.PackageUserKey;
+import cn.imrhj.modify.SuggestIntentKt;
+import cn.imrhj.modify.data.CardInfo;
 
 public class PopupDataProvider implements NotificationListener.NotificationsChangedListener {
     private static final SystemShortcut[] SYSTEM_SHORTCUTS = new SystemShortcut[]{
@@ -188,6 +192,21 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
 
     public List<SystemShortcut> getEnabledSystemShortcutsForItem(ItemInfo itemInfo) {
         List<SystemShortcut> arrayList = new ArrayList<>();
+        Intent intent = itemInfo.getIntent();
+        Log.d(Thread.currentThread().getName(), "rhjlog className: PopupDataProvider, getEnabledSystemShortcutsForItem: " + intent.toString());
+
+        if (intent.getComponent() != null) {
+            List<CardInfo> cardInfos = SuggestIntentKt.getSuggestIntentByPkName(intent.getComponent().getPackageName());
+            if (cardInfos != null && cardInfos.size() > 0) {
+                Iterator<CardInfo> iterator = cardInfos.iterator();
+                while (iterator.hasNext()) {
+                    arrayList.add(new SystemShortcut.ShortCut(iterator.next()));
+                }
+            }
+
+        }
+
+
         for (SystemShortcut systemShortcut : SYSTEM_SHORTCUTS) {
             if (systemShortcut.getOnClickListener(mLauncher, itemInfo) != null) {
                 arrayList.add(systemShortcut);

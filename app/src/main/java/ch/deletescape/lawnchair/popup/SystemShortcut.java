@@ -3,6 +3,7 @@ package ch.deletescape.lawnchair.popup;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -18,6 +19,8 @@ import ch.deletescape.lawnchair.compat.LauncherActivityInfoCompat;
 import ch.deletescape.lawnchair.util.PackageUserKey;
 import ch.deletescape.lawnchair.util.Themes;
 import ch.deletescape.lawnchair.widget.WidgetsBottomSheet;
+import cn.imrhj.modify.data.CardInfo;
+import cn.imrhj.modify.utils.AndroidCommandKt;
 
 public abstract class SystemShortcut {
     private final int mIconResId;
@@ -97,5 +100,34 @@ public abstract class SystemShortcut {
 
     public String getLabel(Context context) {
         return context.getString(this.mLabelResId);
+    }
+
+    public static class ShortCut extends SystemShortcut {
+        private CardInfo cardInfo;
+
+        public ShortCut(CardInfo cardInfo) {
+            super(cardInfo.getIconRes(), R.string.app_info_drop_target_label);
+            this.cardInfo = cardInfo;
+        }
+
+        @Override
+        public String getLabel(Context context) {
+            if (cardInfo.getTitleString() != null) {
+                return cardInfo.getTitleString();
+            }
+            return super.getLabel(context);
+        }
+
+        @Override
+        public OnClickListener getOnClickListener(Launcher launcher, final ItemInfo itemInfo) {
+            return new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(Thread.currentThread().getName(), "rhjlog className: ShortCut, onClick: " + cardInfo.getClassName());
+                    int result = AndroidCommandKt.execRooted("am start -n " + cardInfo.getPackageName() + "/" + cardInfo.getClassName());
+                    Log.d(Thread.currentThread().getName(), "rhjlog className: ShortCut, onClick: result " + result);
+                }
+            };
+        }
     }
 }
